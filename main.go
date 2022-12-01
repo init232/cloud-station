@@ -52,7 +52,13 @@ func LoadParams() {
 	flag.StringVar(&UploadFile, "file", "", "上传的文件")
 	flag.Parse()
 }
+
+func Usage() {
+	fmt.Fprintf(os.Stderr, "cloud-station version:0.0.1 Usage: cloud-station [-help]\n")
+	flag.PrintDefaults()
+}
 func main() {
+	Usage()
 	//参数加载
 	LoadParams()
 	//参数验证
