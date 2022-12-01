@@ -28,9 +28,17 @@ func Upload(filepath string) error {
 		fmt.Println("获取bucket失败", err.Error())
 	}
 	//3. 上传文件到bucket
-	err = bucket.PutObjectFromFile(filepath, filepath)
-	return err
+	if err = bucket.PutObjectFromFile(filepath, filepath); err != nil {
+		return err
+	}
+	//4. 打印下载链接
+	DownLoadUrl, err := bucket.SignURL(filepath, oss.HTTPGet, 60*60*24)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("文件下载URL: %s 请在一天之内下载\n", DownLoadUrl)
 
+	return nil
 }
 
 // 参数和上传文件合法性检查
@@ -57,6 +65,7 @@ func Usage() {
 	fmt.Fprintf(os.Stderr, "cloud-station version:0.0.1 Usage: cloud-station [-help]\n")
 	flag.PrintDefaults()
 }
+
 func main() {
 	Usage()
 	//参数加载
