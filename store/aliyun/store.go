@@ -10,13 +10,26 @@ var (
 	_ store.Uploader = &AliOssStore{}
 )
 
+type Options struct {
+	Endpoint     string
+	AccessKey    string
+	AccessSercet string
+}
+
+func (o *Options) Validate() error {
+	//校验传参
+	if o.Endpoint == "" || o.AccessKey == "" || o.AccessSercet == "" {
+		return nil, error("")
+	}
+
+}
+
 // AliOssStore 对象构造函数
-func NewAliOssStore(endpoint, accesskey, accessSercet string) (*AliOssStore, error) {
-	c, err := oss.New(endpoint, accesskey, accessSercet)
+func NewAliOssStore(opts *Options) (*AliOssStore, error) {
+	c, err := oss.New(opts.Endpoint, opts.AccessKey, opts.AccessSercet)
 	if err != nil {
 		return nil, err
 	}
-
 	return &AliOssStore{
 		clinet: c,
 	}, nil
